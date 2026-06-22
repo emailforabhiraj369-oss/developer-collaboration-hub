@@ -1,17 +1,11 @@
 
 import DashboardLayout from './components/DashboardLayout';
-import { useAnalyticsStore } from './store/useAnalyticsStore';
-// import { mockDeveloperMetrics } from './utils/mockData';
+import { useDeveloperAnalytics } from './hooks/useDeveloperAnalytics';
 
 
 export default function App() {
-  const { metrics } = useAnalyticsStore();
-
-  // Dynamaic Algorithm Aggregate Computations for Dashboard Summary Metrics
-  const totalCommits = metrics.reduce((acc,curr)=>acc+curr.commits,0);
-  const totalPRs = metrics.reduce((acc,curr)=>acc+curr.pullRequests,0);
-  const totalIssues = metrics.reduce((acc,curr)=>acc+curr.openIssues,0);
-
+  
+  const {metrics, totalCommits, totalPRs, totalIssues}= useDeveloperAnalytics();
   return (
     <DashboardLayout>
       {/* Everything inside here represents the {children} prop */}
@@ -66,14 +60,14 @@ export default function App() {
                </thead>
                <tbody>
                 {metrics.map((dev) => (
-                  <tr key={dev.id} className='hover:bg-slate900/30 transition'>
+                  <tr key={dev.id} className='hover:bg-slate-900/30 transition'>
                     <td className='py-4 px-6 flex items-center space-x-3'>
                       <img src={dev.avatarUrl} alt={dev.developerName} className='w-8 h-8 rounded-full bg-slate-800' />
                       <span className='text-white font-medium'>{dev.developerName}</span>
                     </td>
 
                     <td className='py-4 px-6'>
-                      <span className='px-25 py-1 text-xs font medium rounded-md bg-slate-900 border border-slate-800 text-slaTE-300'>{dev.role}</span>
+                      <span className='px-2.5 py-1 text-xs font medium rounded-md bg-slate-900 border border-slate-800 text-slaTE-300'>{dev.role}</span>
                     </td>
                     <td className='py-4 px-6 text-center font-mono font-semibold text-blue-400'>{dev.commits}</td>
                     <td className='py-4 px-6 text-center font-semibold text-indigo-400'>{dev.pullRequests}</td>
