@@ -15,3 +15,15 @@ export interface DashboardSummary{
     resolvedIssues:number;
     velocityScore:number;
 }
+
+export interface DeveloperMetrics{
+    id:string;
+    developerName:string;
+    // avatarUrl:string;
+    role:string;
+    commits:number;
+    pullRequests:number;
+    openIssues:number;
+    lastActive:string;
+    avatarUrl:string;
+}

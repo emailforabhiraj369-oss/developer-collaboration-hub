@@ -1,7 +1,17 @@
+
 import DashboardLayout from './components/DashboardLayout';
-import { mockDeveloperMetrics } from './utils/mockData';
+import { useAnalyticsStore } from './store/useAnalyticsStore';
+// import { mockDeveloperMetrics } from './utils/mockData';
+
 
 export default function App() {
+  const { metrics } = useAnalyticsStore();
+
+  // Dynamaic Algorithm Aggregate Computations for Dashboard Summary Metrics
+  const totalCommits = metrics.reduce((acc,curr)=>acc+curr.commits,0);
+  const totalPRs = metrics.reduce((acc,curr)=>acc+curr.pullRequests,0);
+  const totalIssues = metrics.reduce((acc,curr)=>acc+curr.openIssues,0);
+
   return (
     <DashboardLayout>
       {/* Everything inside here represents the {children} prop */}
@@ -13,21 +23,21 @@ export default function App() {
           {/* Card 1: Total Commits */}
           <div className="p-6 bg-slate-950 border border-slate-800 rounded-xl shadow-lg">
             <p className="text-sm text-slate-400 font-medium">Total Code Commits</p>
-            <p className="text-3xl font-bold text-white mt-2">92</p>
+            <p className="text-3xl font-bold text-white mt-2">{totalCommits}</p>
             <span className="text-xs text-emerald-400 font-medium block mt-2">▲ +12% this week</span>
           </div>
 
           {/* Card 2: Active PRs */}
           <div className="p-6 bg-slate-950 border border-slate-800 rounded-xl shadow-lg">
             <p className="text-sm text-slate-400 font-medium">Active Pull Requests</p>
-            <p className="text-3xl font-bold text-white mt-2">24</p>
+            <p className="text-3xl font-bold text-white mt-2">{totalPRs}</p>
             <span className="text-xs text-blue-400 font-medium block mt-2">Indexed Real-time</span>
           </div>
 
           {/* Card 3: Open System Issues */}
           <div className="p-6 bg-slate-950 border border-slate-800 rounded-xl shadow-lg">
             <p className="text-sm text-slate-400 font-medium">Open System Issues</p>
-            <p className="text-3xl font-bold text-white mt-2">8</p>
+            <p className="text-3xl font-bold text-white mt-2">{totalIssues}</p> 
             <span className="text-xs text-rose-400 font-medium block mt-2">▼ 3 resolved today</span>
           </div>
 
@@ -55,7 +65,7 @@ export default function App() {
                 </tr>
                </thead>
                <tbody>
-                {mockDeveloperMetrics.map((dev) => (
+                {metrics.map((dev) => (
                   <tr key={dev.id} className='hover:bg-slate900/30 transition'>
                     <td className='py-4 px-6 flex items-center space-x-3'>
                       <img src={dev.avatarUrl} alt={dev.developerName} className='w-8 h-8 rounded-full bg-slate-800' />
