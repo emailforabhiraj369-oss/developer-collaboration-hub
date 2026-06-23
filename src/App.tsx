@@ -1,7 +1,33 @@
 
+import { memo } from 'react';
 import DashboardLayout from './components/DashboardLayout';
 import { useDeveloperAnalytics } from './hooks/useDeveloperAnalytics';
+import type { DeveloperMetrics } from './types/analytics';
 
+// Isolate and Memoize the Row Component to block unneccessary parent re-renders
+
+const DeveloperRow = memo(({dev}:{dev:DeveloperMetrics }) => {
+  
+  return (
+     <tr key={dev.id} className='hover:bg-slate-900/30 transition'>
+                    <td className='py-4 px-6 flex items-center space-x-3'>
+                      <img src={dev.avatarUrl} alt={dev.developerName} className='w-8 h-8 rounded-full bg-slate-800' />
+                      <span className='text-white font-medium'>{dev.developerName}</span>
+                    </td>
+
+                    <td className='py-4 px-6'>
+                      <span className='px-2.5 py-1 text-xs font medium rounded-md bg-slate-900 border border-slate-800 text-slaTE-300'>{dev.role}</span>
+                    </td>
+                    <td className='py-4 px-6 text-center font-mono font-semibold text-blue-400'>{dev.commits}</td>
+                    <td className='py-4 px-6 text-center font-semibold text-indigo-400'>{dev.pullRequests}</td>
+                    <td className='py-4 px-6 text-center font-semibold text-rose-400'>{dev.openIssues}</td>
+                    <td className='py-4 px-6 text-right text-xs text-slate-400'>{dev.lastActive}</td>
+
+                  </tr>
+  )
+})
+
+DeveloperRow.displayName = 'DeveloperRow';
 
 export default function App() {
   
@@ -59,22 +85,9 @@ export default function App() {
                 </tr>
                </thead>
                <tbody>
+                {/* Consume the meoized sub-component mapping */}
                 {metrics.map((dev) => (
-                  <tr key={dev.id} className='hover:bg-slate-900/30 transition'>
-                    <td className='py-4 px-6 flex items-center space-x-3'>
-                      <img src={dev.avatarUrl} alt={dev.developerName} className='w-8 h-8 rounded-full bg-slate-800' />
-                      <span className='text-white font-medium'>{dev.developerName}</span>
-                    </td>
-
-                    <td className='py-4 px-6'>
-                      <span className='px-2.5 py-1 text-xs font medium rounded-md bg-slate-900 border border-slate-800 text-slaTE-300'>{dev.role}</span>
-                    </td>
-                    <td className='py-4 px-6 text-center font-mono font-semibold text-blue-400'>{dev.commits}</td>
-                    <td className='py-4 px-6 text-center font-semibold text-indigo-400'>{dev.pullRequests}</td>
-                    <td className='py-4 px-6 text-center font-semibold text-rose-400'>{dev.openIssues}</td>
-                    <td className='py-4 px-6 text-right text-xs text-slate-400'>{dev.lastActive}</td>
-
-                  </tr>
+                  <DeveloperRow key={dev.id} dev={dev} />
                 ))}
               </tbody>
             </table>
